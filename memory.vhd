@@ -9,7 +9,6 @@ entity memory is
     address_size  : integer := 4
   );
   port (
-    clk        : in std_logic;
     CE         : in std_logic;
     address_in : in std_logic_vector(address_size - 1 downto 0);
     data_out   : out std_logic_vector(address_width - 1 downto 0)
@@ -41,21 +40,13 @@ architecture behavourial of memory is
   15 => "00000000"
   );
 
-  signal address_reg : std_logic_vector(address_size - 1 downto 0);
-
 begin
-
-  process (clk, CE)
+  process (CE, address_in)
   begin
-    if rising_edge(clk) then
-      if CE = '1' then
-        address_reg <= address_in;
-      else
-        address_reg <= (others => '0');
-      end if;
+    if CE = '1' then
+      data_out <= rom(to_integer(unsigned(address_in)));
+    else
+      data_out <= (others => 'Z');
     end if;
   end process;
-
-  data_out <= rom(to_integer(unsigned(address_reg)));
-
 end architecture;
