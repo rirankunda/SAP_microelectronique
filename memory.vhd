@@ -10,8 +10,7 @@ entity memory is
   );
   port (
     clk        : in std_logic;
-    reset      : in std_logic;
-    enable     : in std_logic;
+    CE         : in std_logic;
     address_in : in std_logic_vector(address_size - 1 downto 0);
     data_out   : out std_logic_vector(address_width - 1 downto 0)
   );
@@ -46,13 +45,13 @@ architecture behavourial of memory is
 
 begin
 
-  process (clk, reset)
+  process (clk, CE)
   begin
-    if reset = '1' then
-      address_reg <= (others => '0');
-    elsif rising_edge(clk) then
-      if enable = '1' then
+    if rising_edge(clk) then
+      if CE = '1' then
         address_reg <= address_in;
+      else
+        address_reg <= (others => '0');
       end if;
     end if;
   end process;
