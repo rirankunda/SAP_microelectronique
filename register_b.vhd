@@ -17,7 +17,7 @@ begin
   process (clk, Lb)
   begin
     if rising_edge(clk) then
-      if Lb = '1' then
+      if Lb = '0' then
         b_reg <= unsigned(data_in);
       end if;
     end if;

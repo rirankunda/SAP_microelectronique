@@ -17,7 +17,7 @@ begin
   process (clk, Lo)
   begin
     if rising_edge(clk) then
-      if Lo = '1' then
+      if Lo = '0' then
         o_reg <= unsigned(data_in);
       end if;
     end if;

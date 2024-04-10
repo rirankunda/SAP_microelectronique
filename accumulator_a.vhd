@@ -19,7 +19,7 @@ begin
   process (clk, La)
   begin
     if rising_edge(clk) then
-      if La = '1' then
+      if La = '0' then
         a_reg <= unsigned(data_in);
       end if;
     end if;
