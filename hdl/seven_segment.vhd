@@ -24,6 +24,12 @@ begin
       when "0111" => seg <= "0001111"; -- 7
       when "1000" => seg <= "0000000"; -- 8
       when "1001" => seg <= "0000100"; -- 9
+      when "1010" => seg <= "0000010"; -- A
+      when "1011" => seg <= "0110000"; -- B
+      when "1100" => seg <= "0100111"; -- C
+      when "1101" => seg <= "0010001"; -- D
+      when "1110" => seg <= "0100010"; -- E
+      when "1111" => seg <= "0100110"; -- F
       when others => seg <= "1111111"; -- null
     end case;
   end process;
