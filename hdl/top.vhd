@@ -23,19 +23,62 @@ architecture behavourial of top is
   signal hlt                                            : std_logic := '1';
 
   -- Input & Memory Address Register
+  signal mar_in : std_logic_vector(3 downto 0);
   signal mar_out : std_logic_vector(3 downto 0);
 
-  -- accumulator A & register B
-  signal acc_a_out : std_logic_vector(7 downto 0);
+  -- accumulator A
+  signal acc_a_in : std_logic_vector(7 downto 0);
+  signal acc_a_alu_out : std_logic_vector(7 downto 0);
+  signal acc_a_bus_out : std_logic_vector(7 downto 0);
+
+  -- register B
+  signal reg_b_in : std_logic_vector(7 downto 0);
   signal reg_b_out : std_logic_vector(7 downto 0);
 
   -- instruction register
-  signal ir_out : std_logic_vector(3 downto 0);
+  signal ir_in : std_logic_vector(7 downto 0);
+  signal ir_opcode_out : std_logic_vector(3 downto 0);
+  signal ir_addr_out : std_logic_vector(3 downto 0);
 
   -- output register
-  signal out_out : std_logic_vector(7 downto 0);
+  signal or_in : std_logic_vector(7 downto 0);
+  signal or_out : std_logic_vector(7 downto 0);
 
+  -- program counter
+  signal pc_out : std_logic_vector(3 downto 0);
+
+  -- memory
+  signal mem_out : std_logic_vector(7 downto 0);
+
+  -- adder substractor
+  signal adder_out : std_logic_vector(7 downto 0);
 begin
+
+  process(Ep, Ei, Ea, Eu, Lm, Li, La, Lb, Lo)
+  begin
+    if Ep = '1' then
+      bus_signal(3 downto 0) <= pc_out;
+    elsif Ei = '0' then
+      bus_signal(3 downto 0) <= ir_addr_out;
+    elsif Ea = '1' then
+      bus_signal <= acc_a_bus_out;
+    elsif Eu = '1' then
+      bus_signal <= adder_out;
+    end if;
+
+    if Lm = '0' then
+      mar_in <= bus_signal(3 downto 0);
+    elsif Li = '0' then
+      ir_in <= bus_signal;
+    elsif La = '0' then
+      acc_a_in <= bus_signal;
+    elsif Lb = '0' then
+      reg_b_in <= bus_signal;
+    elsif Lo = '0' then
+      or_in <= bus_signal;
+    end if;
+      
+  end process;
 
   clock_inst : entity work.clock
     port map(
@@ -49,24 +92,25 @@ begin
       clk          => clk,
       La           => La,
       Ea           => Ea,
-      data_in      => bus_signal,
-      data_out_bus => bus_signal,
-      data_out_alu => acc_a_out
+      data_in      => acc_a_in,
+      data_out_bus => acc_a_bus_out,
+      data_out_alu => acc_a_alu_out
     );
 
   adder_sub_inst : entity work.adder_sub
     port map(
-      a        => acc_a_out,
+      a        => acc_a_alu_out,
       b        => reg_b_out,
-      sub      => Su,
-      data_out => bus_signal
+      Su       => Su,
+      Eu       => Eu,
+      data_out => adder_out
     );
 
   controller_sequencer_inst : entity work.controller_sequencer
     port map(
       clk       => clk_in,
       clr       => clr,
-      opcode_in => ir_out,
+      opcode_in => ir_opcode_out,
       Cp        => Cp,
       Ep        => Ep,
       Lm        => Lm,
@@ -86,7 +130,7 @@ begin
     port map(
       clk         => clk,
       Lm          => Lm,
-      address_in  => bus_signal(3 downto 0),
+      address_in  => mar_in,
       address_out => mar_out
     );
 
@@ -96,24 +140,24 @@ begin
       clr            => clr,
       Li             => Li,
       Ei             => Ei,
-      instruction_in => bus_signal,
-      opcode_out     => ir_out,
-      address_out    => bus_signal(3 downto 0)
+      instruction_in => ir_in,
+      opcode_out     => ir_opcode_out,
+      address_out    => ir_addr_out
     );
 
   memory_inst : entity work.memory
     port map(
       CE         => CE,
       address_in => mar_out,
-      data_out   => bus_signal
+      data_out   => mem_out
     );
 
   out_register_inst : entity work.out_register
     port map(
       clk      => clk,
       Lo       => Lo,
-      data_in  => bus_signal,
-      data_out => out_out
+      data_in  => or_in,
+      data_out => or_out
     );
 
   program_counter_inst : entity work.program_counter
@@ -122,21 +166,27 @@ begin
       clr         => clr,
       Ep          => Ep,
       Cp          => Cp,
-      address_out => bus_signal(3 downto 0)
+      address_out => pc_out
     );
 
   register_b_inst : entity work.register_b
     port map(
       clk      => clk,
       Lb       => Lb,
-      data_in  => bus_signal,
+      data_in  => reg_b_in,
       data_out => reg_b_out
     );
 
   seven_segment_inst : entity work.seven_segment
     port map(
-      bcd => out_out(3 downto 0),
-      seg => a & b & c & d & e & f & g
+      bcd => or_out(3 downto 0),
+      seg(0) => a,
+      seg(1) => b,
+      seg(2) => c,
+      seg(3) => d,
+      seg(4) => e,
+      seg(5) => f,
+      seg(6) => g
     );
 
   bus_out <= bus_signal;

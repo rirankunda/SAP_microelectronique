@@ -30,7 +30,7 @@ architecture behavioral of controller_sequencer is
   constant OP_OUT : std_logic_vector(3 downto 0) := "1110";
   constant OP_HLT : std_logic_vector(3 downto 0) := "1111";
 
-  signal stage : integer range 0 to 5;
+  signal stage : integer range 0 to 5 := 0;
 
   signal control_signal : std_logic_vector(11 downto 0) := (others => '0');
   signal hlt_signal     : std_logic                     := '1';
