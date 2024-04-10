@@ -133,10 +133,12 @@ begin
       data_out => reg_b_out
     );
 
-  seven_segment_inst_1 : entity work.seven_segment
+  seven_segment_inst : entity work.seven_segment
     port map(
-      bcd => out_out,
-      seg => (a, b, c, d, e, f, g)
+      bcd => out_out(3 downto 0),
+      seg => a & b & c & d & e & f & g
     );
+
+  bus_out <= bus_signal;
 
 end architecture;

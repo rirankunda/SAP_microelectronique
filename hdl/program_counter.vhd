@@ -26,7 +26,7 @@ begin
     end if;
   end process;
 
-  process (Ep)
+  process (Ep, pc_reg)
   begin
     if Ep = '1' then
       address_out <= std_logic_vector(pc_reg);

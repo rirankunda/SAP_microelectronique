@@ -52,8 +52,9 @@ begin
     end if;
   end process;
 
-  process (stage)
+  process (stage, opcode_in)
   begin
+    hlt_signal <= '1'; -- default value
     case stage is
       when 0 =>
         -- enable program counter (Ep), load into MAR (Lm)

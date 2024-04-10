@@ -3,22 +3,15 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity memory is
-  generic (
-    data_width    : integer := 8;
-    address_width : integer := 8;
-    address_size  : integer := 4
-  );
   port (
     CE         : in std_logic;
-    address_in : in std_logic_vector(address_size - 1 downto 0);
-    data_out   : out std_logic_vector(address_width - 1 downto 0)
+    address_in : in std_logic_vector(3 downto 0);
+    data_out   : out std_logic_vector(7 downto 0)
   );
 end entity;
 
 architecture behavourial of memory is
-  constant ram_depth : integer := 2 ** address_width;
-
-  type memory_type is array (0 to ram_depth) of std_logic_vector(data_width downto 0);
+  type memory_type is array (0 to 15) of std_logic_vector(7 downto 0);
 
   -- todo: fill data:
   signal rom : memory_type := (
@@ -41,7 +34,7 @@ architecture behavourial of memory is
   );
 
 begin
-  process (CE, address_in)
+  process (CE, rom, address_in)
   begin
     if CE = '1' then
       data_out <= rom(to_integer(unsigned(address_in)));
