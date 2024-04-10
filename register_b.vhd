@@ -12,17 +12,17 @@ entity register_b is
 end entity register_b;
 
 architecture behavioral of register_b is
-  signal b_reg : unsigned(7 downto 0) := (others => '0');
+  signal b_reg : std_logic_vector(7 downto 0) := (others => '0');
 begin
   process (clk, Lb)
   begin
     if rising_edge(clk) then
       if Lb = '0' then
-        b_reg <= unsigned(data_in);
+        b_reg <= data_in;
       end if;
     end if;
   end process;
 
-  data_out <= std_logic_vector(b_reg);
+  data_out <= b_reg;
 
 end architecture;

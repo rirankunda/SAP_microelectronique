@@ -14,13 +14,13 @@ entity accumulator_a is
 end entity accumulator_a;
 
 architecture behavioral of accumulator_a is
-  signal a_reg : unsigned(7 downto 0) := (others => '0');
+  signal a_reg : std_logic_vector(7 downto 0) := (others => '0');
 begin
   process (clk, La)
   begin
     if rising_edge(clk) then
       if La = '0' then
-        a_reg <= unsigned(data_in);
+        a_reg <= data_in;
       end if;
     end if;
   end process;
@@ -29,13 +29,13 @@ begin
   begin
     if rising_edge(clk) then
       if Ea = '1' then
-        data_out_bus <= std_logic_vector(a_reg);
+        data_out_bus <= a_reg;
       else
         data_out_bus <= (others => 'Z');
       end if;
     end if;
   end process;
 
-  data_out_alu <= std_logic_vector(a_reg);
+  data_out_alu <= a_reg;
 
 end architecture;

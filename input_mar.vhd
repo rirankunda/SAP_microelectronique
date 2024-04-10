@@ -12,17 +12,17 @@ entity input_mar is
 end entity input_mar;
 
 architecture behavioral of input_mar is
-  signal mar_reg : unsigned(7 downto 0) := (others => '0');
+  signal mar_reg : std_logic_vector(3 downto 0) := (others => '0');
 begin
   process (clk, Lm)
   begin
     if rising_edge(clk) then
       if Lm = '0' then
-        mar_reg <= unsigned(address_in);
+        mar_reg <= address_in;
       end if;
     end if;
   end process;
 
-  address_out <= std_logic_vector(mar_reg);
+  address_out <= mar_reg;
 
 end architecture;

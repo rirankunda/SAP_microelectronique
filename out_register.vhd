@@ -12,17 +12,17 @@ entity out_register is
 end entity out_register;
 
 architecture behavioral of out_register is
-  signal o_reg : unsigned(7 downto 0) := (others => '0');
+  signal o_reg : std_logic_vector(7 downto 0) := (others => '0');
 begin
   process (clk, Lo)
   begin
     if rising_edge(clk) then
       if Lo = '0' then
-        o_reg <= unsigned(data_in);
+        o_reg <= data_in;
       end if;
     end if;
   end process;
 
-  data_out <= std_logic_vector(o_reg);
+  data_out <= o_reg;
 
 end architecture;
