@@ -23,25 +23,25 @@ architecture behavourial of top is
   signal hlt                                            : std_logic := '1';
 
   -- Input & Memory Address Register
-  signal mar_in : std_logic_vector(3 downto 0);
+  signal mar_in  : std_logic_vector(3 downto 0);
   signal mar_out : std_logic_vector(3 downto 0);
 
   -- accumulator A
-  signal acc_a_in : std_logic_vector(7 downto 0);
+  signal acc_a_in      : std_logic_vector(7 downto 0);
   signal acc_a_alu_out : std_logic_vector(7 downto 0);
   signal acc_a_bus_out : std_logic_vector(7 downto 0);
 
   -- register B
-  signal reg_b_in : std_logic_vector(7 downto 0);
+  signal reg_b_in  : std_logic_vector(7 downto 0);
   signal reg_b_out : std_logic_vector(7 downto 0);
 
   -- instruction register
-  signal ir_in : std_logic_vector(7 downto 0);
+  signal ir_in         : std_logic_vector(7 downto 0);
   signal ir_opcode_out : std_logic_vector(3 downto 0);
-  signal ir_addr_out : std_logic_vector(3 downto 0);
+  signal ir_addr_out   : std_logic_vector(3 downto 0);
 
   -- output register
-  signal or_in : std_logic_vector(7 downto 0);
+  signal or_in  : std_logic_vector(7 downto 0);
   signal or_out : std_logic_vector(7 downto 0);
 
   -- program counter
@@ -54,7 +54,7 @@ architecture behavourial of top is
   signal adder_out : std_logic_vector(7 downto 0);
 begin
 
-  process(Ep, Ei, Ea, Eu, Lm, Li, La, Lb, Lo)
+  process (bus_signal, Ep, Ei, Ea, Eu, Lm, Li, La, Lb, Lo, pc_out, ir_addr_out, acc_a_bus_out, adder_out)
   begin
     if Ep = '1' then
       bus_signal(3 downto 0) <= pc_out;
@@ -64,6 +64,8 @@ begin
       bus_signal <= acc_a_bus_out;
     elsif Eu = '1' then
       bus_signal <= adder_out;
+    else
+      bus_signal <= (others => 'Z');
     end if;
 
     if Lm = '0' then
@@ -77,7 +79,7 @@ begin
     elsif Lo = '0' then
       or_in <= bus_signal;
     end if;
-      
+
   end process;
 
   clock_inst : entity work.clock
@@ -179,7 +181,7 @@ begin
 
   seven_segment_inst : entity work.seven_segment
     port map(
-      bcd => or_out(3 downto 0),
+      bcd    => or_out(3 downto 0),
       seg(0) => a,
       seg(1) => b,
       seg(2) => c,
