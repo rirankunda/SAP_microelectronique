@@ -49,6 +49,47 @@ R11
 !i113 1
 R12
 R13
+Eadder_sub
+Z14 w1712840753
+R2
+R3
+R4
+R0
+Z15 8C:/Users/riran/Desktop/cours/ma1/microelectronique/SAP_microelectronique/hdl/adder_sub.vhd
+Z16 FC:/Users/riran/Desktop/cours/ma1/microelectronique/SAP_microelectronique/hdl/adder_sub.vhd
+l0
+L5
+VNd:d;6ALC=nKa2]8aMl;z1
+!s100 YPVHPi>E6fZ3RaUZ5`=<o0
+R7
+32
+Z17 !s110 1712840784
+!i10b 1
+Z18 !s108 1712840784.000000
+Z19 !s90 -reportprogress|300|-work|work|C:/Users/riran/Desktop/cours/ma1/microelectronique/SAP_microelectronique/hdl/adder_sub.vhd|
+Z20 !s107 C:/Users/riran/Desktop/cours/ma1/microelectronique/SAP_microelectronique/hdl/adder_sub.vhd|
+!i113 1
+R12
+R13
+Abehavioral
+R2
+R3
+R4
+DEx4 work 9 adder_sub 0 22 Nd:d;6ALC=nKa2]8aMl;z1
+l16
+L15
+VF7:cg0ZXZMFV`@_oM8=2I1
+!s100 lZDz<bB:9M79?=:KP4XK11
+R7
+32
+R17
+!i10b 1
+R18
+R19
+R20
+!i113 1
+R12
+R13
 Eprogram_counter_tb
 w1712831306
 R2
@@ -72,23 +113,23 @@ R7
 R12
 R13
 Etb_accumulator
-Z14 w1712834637
+Z21 w1712834637
 R3
 R4
 R0
-Z15 8C:/Users/riran/Desktop/cours/ma1/microelectronique/SAP_microelectronique/tb/tb_accumulator.vhd
-Z16 FC:/Users/riran/Desktop/cours/ma1/microelectronique/SAP_microelectronique/tb/tb_accumulator.vhd
+Z22 8C:/Users/riran/Desktop/cours/ma1/microelectronique/SAP_microelectronique/tb/tb_accumulator.vhd
+Z23 FC:/Users/riran/Desktop/cours/ma1/microelectronique/SAP_microelectronique/tb/tb_accumulator.vhd
 l0
 L4
 VA]JY[8Ne9S3=cBHXzlOLW0
 !s100 YkXb0TDeo2BPk:0FNzHQk0
 R7
 32
-Z17 !s110 1712834843
+Z24 !s110 1712834843
 !i10b 1
-Z18 !s108 1712834843.000000
-Z19 !s90 -reportprogress|300|-work|work|C:/Users/riran/Desktop/cours/ma1/microelectronique/SAP_microelectronique/tb/tb_accumulator.vhd|
-Z20 !s107 C:/Users/riran/Desktop/cours/ma1/microelectronique/SAP_microelectronique/tb/tb_accumulator.vhd|
+Z25 !s108 1712834843.000000
+Z26 !s90 -reportprogress|300|-work|work|C:/Users/riran/Desktop/cours/ma1/microelectronique/SAP_microelectronique/tb/tb_accumulator.vhd|
+Z27 !s107 C:/Users/riran/Desktop/cours/ma1/microelectronique/SAP_microelectronique/tb/tb_accumulator.vhd|
 !i113 1
 R12
 R13
@@ -102,32 +143,71 @@ V0Mj2n]5[D;OnnMnd1n^b61
 !s100 d;:g<al?8A[B15K36Ie412
 R7
 32
-R17
+R24
 !i10b 1
-R18
-R19
-R20
+R25
+R26
+R27
+!i113 1
+R12
+R13
+Etb_adder_sub
+Z28 w1712841018
+R3
+R4
+R0
+Z29 8C:/Users/riran/Desktop/cours/ma1/microelectronique/SAP_microelectronique/tb/tb_adder_sub.vhd
+Z30 FC:/Users/riran/Desktop/cours/ma1/microelectronique/SAP_microelectronique/tb/tb_adder_sub.vhd
+l0
+L4
+Vc=Dh9Gnk=[H=^Kol17iH`1
+!s100 XM:Bd^3m[JJnaI3j[6j=a0
+R7
+32
+Z31 !s110 1712841104
+!i10b 1
+Z32 !s108 1712841104.000000
+Z33 !s90 -reportprogress|300|-work|work|C:/Users/riran/Desktop/cours/ma1/microelectronique/SAP_microelectronique/tb/tb_adder_sub.vhd|
+Z34 !s107 C:/Users/riran/Desktop/cours/ma1/microelectronique/SAP_microelectronique/tb/tb_adder_sub.vhd|
+!i113 1
+R12
+R13
+Abehavioral
+R3
+R4
+Z35 DEx4 work 12 tb_adder_sub 0 22 c=Dh9Gnk=[H=^Kol17iH`1
+l21
+L7
+VM;haz>TV=Rn4Pa=[;[SMH0
+!s100 JPVTXV2h_;gm0j^fc;E4F1
+R7
+32
+R31
+!i10b 1
+R32
+R33
+R34
 !i113 1
 R12
 R13
 Etb_program_counter
-Z21 w1712834302
+Z36 w1712834302
 R3
 R4
 R0
-Z22 8C:/Users/riran/Desktop/cours/ma1/microelectronique/SAP_microelectronique/hdl/tb_program_counter.vhd
-Z23 FC:/Users/riran/Desktop/cours/ma1/microelectronique/SAP_microelectronique/hdl/tb_program_counter.vhd
+Z37 8C:/Users/riran/Desktop/cours/ma1/microelectronique/SAP_microelectronique/hdl/tb_program_counter.vhd
+Z38 FC:/Users/riran/Desktop/cours/ma1/microelectronique/SAP_microelectronique/hdl/tb_program_counter.vhd
 l0
 L4
 VLC5<EPinTfIQ=^KG=`VWn0
 !s100 ^UdLbz_agfD7[b4YWb@lf0
 R7
 32
-Z24 !s110 1712835182
+Z39 !s110 1712835182
 !i10b 1
-Z25 !s108 1712835182.000000
-Z26 !s90 -reportprogress|300|-work|work|C:/Users/riran/Desktop/cours/ma1/microelectronique/SAP_microelectronique/hdl/tb_program_counter.vhd|
-Z27 !s107 C:/Users/riran/Desktop/cours/ma1/microelectronique/SAP_microelectronique/hdl/tb_program_counter.vhd|
+Z40 !s108 1712835182.000000
+Z41 !s90 -reportprogress|300|-work|work|C:/Users/riran/Desktop/cours/ma1/microelectronique/SAP_microelectronique/hdl/tb_program_counter.vhd|
+Z42 !s107 C:/Users/riran/Desktop/cours/ma1/microelectronique/SAP_microelectronique/hdl/tb_program_counter.vhd|
 !i113 1
 R12
 R13
@@ -141,11 +221,11 @@ V:5eAOUlD`kg;Mo2VfebXi1
 !s100 2EnV1T@@H;RdRj5YbIgQ=1
 R7
 32
-R24
+R39
 !i10b 1
-R25
-R26
-R27
+R40
+R41
+R42
 !i113 1
 R12
 R13

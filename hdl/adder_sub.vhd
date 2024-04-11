@@ -26,7 +26,10 @@ begin
   process (Eu)
   begin
     if Eu = '0' then
-      data_out <= (others => 'Z');
+      --data_out <= (others => 'Z'); -- ligne lancelot
+      data_out <= (7 downto 0 =>'Z');
+    else
+      data_out <= "ZZZZZZZZ";
     end if;
   end process;
 end architecture;
