@@ -19,7 +19,7 @@ begin
   begin
     if clr = '0' then
       pc_reg <= (others => '0');
-    elsif rising_edge(clk) then
+    elsif falling_edge(clk) then
       if Cp = '1' then
         pc_reg <= pc_reg + 1;
       end if;

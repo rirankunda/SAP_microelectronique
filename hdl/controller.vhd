@@ -58,47 +58,47 @@ begin
     case stage is
       when 0 =>
         -- enable program counter (Ep), load into MAR (Lm)
-        control_signal <= "011000000000";
+        control_signal <= "010000100011";
       when 1 =>
         -- increment program counter (Cp)
-        control_signal <= "100000000000";
+        control_signal <= "111000100011";
       when 2 =>
         -- enable memory (CE), load into instruction register (Li)
-        control_signal <= "000110000000";
+        control_signal <= "001100100011";
       when 3 =>
         if opcode_in = OP_OUT then
           -- enable accumulator (Ea), load into output register (Lo)
-          control_signal <= "000000010001";
+          control_signal <= "001010110010";
         elsif opcode_in = OP_HLT then
-          -- enable accumulator (Ea), load into output register (Lo)
-          control_signal <= "000000000000";
+          -- (hlt)
+          control_signal <= "001010100011";
           hlt_signal     <= '0';
         else
           -- (Lm),  (Ei)
-          control_signal <= "001001000000";
+          control_signal <= "000011100011";
         end if;
       when 4 =>
         if opcode_in = OP_LDA then
           -- enable memory (CE), load into accumulator (La)
-          control_signal <= "000100100000";
+          control_signal <= "001110000011";
         elsif opcode_in = OP_ADD then
           -- enable memory (CE), load into register b (Lb)
-          control_signal <= "000100000010";
+          control_signal <= "001110100001";
         elsif opcode_in = OP_SUB then
           -- enable memory (CE), load into register b (Lb)
-          control_signal <= "000100000010";
+          control_signal <= "001110100001";
         else
-          control_signal <= "000000000000";
+          control_signal <= "001010100011";
         end if;
       when 5 =>
         if opcode_in = OP_ADD then
-          -- enable memory (CE), load into register b (Lb)
-          control_signal <= "000100000010";
+          -- enable ALU, enable memory (CE), load into register b (Lb)
+          control_signal <= "001010000111";
         elsif opcode_in = OP_SUB then
-          -- enable memory (CE), load into register b (Lb)
-          control_signal <= "000100000010";
+          -- enable ALU, enable memory (CE), load into register b (Lb)
+          control_signal <= "001010101111";
         else
-          control_signal <= "000000000000";
+          control_signal <= "001010100011";
         end if;
     end case;
   end process;
