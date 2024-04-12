@@ -3,7 +3,8 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity controller_sequencer is
-  port (
+  port
+  (
     clk       : in std_logic;
     clr       : in std_logic;
     opcode_in : in std_logic_vector(3 downto 0);
@@ -24,6 +25,19 @@ entity controller_sequencer is
 end entity controller_sequencer;
 
 architecture behavioral of controller_sequencer is
+  constant SIG_CP : integer := 11;
+  constant SIG_EP : integer := 10;
+  constant SIG_LM : integer := 9;
+  constant SIG_CE : integer := 8;
+  constant SIG_LI : integer := 7;
+  constant SIG_EI : integer := 6;
+  constant SIG_LA : integer := 5;
+  constant SIG_EA : integer := 4;
+  constant SIG_SU : integer := 3;
+  constant SIG_EU : integer := 2;
+  constant SIG_LB : integer := 1;
+  constant SIG_LO : integer := 0;
+
   constant OP_LDA : std_logic_vector(3 downto 0) := "0000";
   constant OP_ADD : std_logic_vector(3 downto 0) := "0001";
   constant OP_SUB : std_logic_vector(3 downto 0) := "0010";
@@ -54,51 +68,66 @@ begin
 
   process (stage, opcode_in)
   begin
-    hlt_signal <= '1'; -- default value
+    -- default high signals
+    control_signal(SIG_LO) <= '1';
+    control_signal(SIG_LB) <= '1';
+    control_signal(SIG_LA) <= '1';
+    control_signal(SIG_LI) <= '1';
+    control_signal(SIG_CE) <= '1';
+    control_signal(SIG_LM) <= '1';
+    control_signal(SIG_EI) <= '1';
+
     case stage is
       when 0 =>
         -- enable program counter (Ep), load into MAR (Lm)
-        control_signal <= "010000100011";
+        control_signal(SIG_EP) <= '1';
+        control_signal(SIG_LM) <= '0';
       when 1 =>
         -- increment program counter (Cp)
-        control_signal <= "111000100011";
+        control_signal(SIG_CP) <= '1';
       when 2 =>
         -- enable memory (CE), load into instruction register (Li)
-        control_signal <= "001100100011";
+        control_signal(SIG_CE) <= '0';
+        control_signal(SIG_LI) <= '0';
       when 3 =>
         if opcode_in = OP_OUT then
           -- enable accumulator (Ea), load into output register (Lo)
-          control_signal <= "001010110010";
+          control_signal(SIG_EA) <= '1';
+          control_signal(SIG_LO) <= '0';
         elsif opcode_in = OP_HLT then
-          -- (hlt)
-          control_signal <= "001010100011";
-          hlt_signal     <= '0';
+          -- halt (hlt)
+          hlt_signal <= '0';
         else
-          -- (Lm),  (Ei)
-          control_signal <= "000011100011";
+          -- load into MAR (Lm), enable instruction register (Ei)
+          control_signal(SIG_LM) <= '0';
+          control_signal(SIG_EI) <= '0';
         end if;
       when 4 =>
         if opcode_in = OP_LDA then
           -- enable memory (CE), load into accumulator (La)
-          control_signal <= "001110000011";
+          control_signal(SIG_CE) <= '1';
+          control_signal(SIG_LA) <= '0';
         elsif opcode_in = OP_ADD then
           -- enable memory (CE), load into register b (Lb)
-          control_signal <= "001110100001";
+          control_signal(SIG_CE) <= '0';
+          control_signal(SIG_LB) <= '0';
         elsif opcode_in = OP_SUB then
           -- enable memory (CE), load into register b (Lb)
-          control_signal <= "001110100001";
-        else
-          control_signal <= "001010100011";
+          control_signal(SIG_CE) <= '0';
+          control_signal(SIG_LB) <= '0';
         end if;
       when 5 =>
         if opcode_in = OP_ADD then
-          -- enable ALU, enable memory (CE), load into register b (Lb)
-          control_signal <= "001010000111";
+          -- enable adder-sub, enable memory (CE), load into register b (Lb)
+          control_signal(SIG_EU) <= '1';
+          control_signal(SIG_CE) <= '0';
+          control_signal(SIG_LB) <= '0';
         elsif opcode_in = OP_SUB then
-          -- enable ALU, enable memory (CE), load into register b (Lb)
-          control_signal <= "001010101111";
-        else
-          control_signal <= "001010100011";
+          -- enable adder-sub, enable substraction (Su), enable memory (CE), load into register b (Lb)
+          control_signal(SIG_EU) <= '1';
+          control_signal(SIG_SU) <= '1';
+          control_signal(SIG_CE) <= '0';
+          control_signal(SIG_LB) <= '0';
         end if;
     end case;
   end process;
