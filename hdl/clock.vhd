@@ -15,7 +15,7 @@ architecture behavioral of clock is
 begin
   process (clk_in, hlt)
   begin
-    if hlt = '1' then
+    if hlt = '0' then
       clk_out <= '0';
     else
       clk_out <= clk_in;

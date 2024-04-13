@@ -54,7 +54,7 @@ architecture behavourial of top is
   signal adder_out : std_logic_vector(7 downto 0);
 begin
 
-  process (bus_signal, Ep, Ei, Ea, Eu, Lm, Li, La, Lb, Lo, pc_out, ir_addr_out, acc_a_bus_out, adder_out)
+  process (bus_signal, CE, Ep, Ei, Ea, Eu, Lm, Li, La, Lb, Lo, pc_out, ir_addr_out, acc_a_bus_out, adder_out)
   begin
     if Ep = '1' then
       bus_signal(3 downto 0) <= pc_out;
@@ -64,8 +64,8 @@ begin
       bus_signal <= acc_a_bus_out;
     elsif Eu = '1' then
       bus_signal <= adder_out;
-    else
-      bus_signal <= (others => 'Z');
+    elsif CE = '0' then
+        bus_signal <= mem_out;
     end if;
 
     if Lm = '0' then
@@ -79,7 +79,7 @@ begin
     elsif Lo = '0' then
       or_in <= bus_signal;
     end if;
-
+  
   end process;
 
   clock_inst : entity work.clock

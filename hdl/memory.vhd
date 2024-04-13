@@ -24,9 +24,9 @@ architecture behavourial of memory is
   7  => "00000000",
   8  => "00000000",
   9  => "00000000",
-  10 => "00000101", -- data
-  11 => "00001000",
-  12 => "00000100",
+  10 => "00000101", -- 5
+  11 => "00001000", -- 8
+  12 => "00000100", -- 4
   13 => "00000000",
   14 => "00000000",
   15 => "00000000"
@@ -35,7 +35,7 @@ architecture behavourial of memory is
 begin
   process (CE, rom, address_in)
   begin
-    if CE = '1' then
+    if CE = '0' then
       data_out <= rom(to_integer(unsigned(address_in)));
     else
       data_out <= (others => 'Z');
