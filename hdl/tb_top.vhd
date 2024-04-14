@@ -50,7 +50,7 @@ begin
   tb_main : process
   begin
     test_runner_setup(runner, runner_cfg);
-    wait for 500 ns;
+    wait for 1000 ns;
     test_runner_cleanup(runner); -- Simulation ends here
   end process;
 end architecture;

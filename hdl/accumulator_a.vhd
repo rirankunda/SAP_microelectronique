@@ -25,17 +25,8 @@ begin
     end if;
   end process;
 
-  process (clk, Ea)
-  begin
-    if rising_edge(clk) then
-      if Ea = '1' then
-        data_out_bus <= a_reg;
-      else
-        data_out_bus <= (others => 'Z');
-      end if;
-    end if;
-  end process;
-
   data_out_alu <= a_reg;
+
+  data_out_bus <= a_reg(7 downto 0) when Ea = '1' else (others => 'Z');
 
 end architecture;

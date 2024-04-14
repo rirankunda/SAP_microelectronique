@@ -65,7 +65,7 @@ begin
     elsif Eu = '1' then
       bus_signal <= adder_out;
     elsif CE = '0' then
-        bus_signal <= mem_out;
+      bus_signal <= mem_out;
     end if;
 
     if Lm = '0' then
@@ -79,7 +79,7 @@ begin
     elsif Lo = '0' then
       or_in <= bus_signal;
     end if;
-  
+
   end process;
 
   clock_inst : entity work.clock

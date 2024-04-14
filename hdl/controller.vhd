@@ -30,7 +30,6 @@ begin
   ring_counter_inst : entity work.ring_counter
     port map(
       clk   => clk,
-      reset => clr,
       t     => T
     );
 
