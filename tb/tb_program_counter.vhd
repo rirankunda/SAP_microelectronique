@@ -43,8 +43,14 @@ begin
   begin
     -- Maintiens l'état de réinitialisation pendant 100 ns
     clr <= '1';
+    Ep <= '0';
+    Cp <='0';
     wait for 20 ns;
     clr <= '0';
+    Ep <= '1';
+    Cp <='1';
+    wait for 30 ns;
+    clr <='1';
     wait;
   end process;
 
