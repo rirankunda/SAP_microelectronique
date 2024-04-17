@@ -40,17 +40,14 @@ begin
   -- Stimulus process
   process
   begin
-    wait for 5 ns;
-    Lm <= '1'; -- Set Lm to high
-    wait for 10 ns;
-    Lm <= '0'; -- Set Lm to low
-    wait for 10 ns;
-    address_in <= "1010"; -- Example input address
-    wait for 10 ns;
     Lm <='1';
-    wait for 50 ns;
-    Lm <= '0';
-    -- Add more test cases here if needed
+    address_in <="1001";
+    wait for 20 ns;
+    Lm <= '0'; 
+    wait for 40 ns;
+    address_in <="1111";
+    wait for 60 ns;
+    Lm <='1';
     wait;
   end process;
 
