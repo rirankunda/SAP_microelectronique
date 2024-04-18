@@ -14,22 +14,16 @@ end adder_sub;
 
 architecture behavioral of adder_sub is
 begin
-  process (a, b, Su)
+  process (a, b, Su, Eu)
   begin
-    if Su = '1' then
-      data_out <= std_logic_vector(signed(a) - signed(b));
+    if Eu = '1' then
+      if Su = '1' then
+        data_out <= std_logic_vector(signed(a) - signed(b)); -- subtraction
+      else
+        data_out <= std_logic_vector(signed(a) + signed(b)); -- addition
+      end if;
     else
-      data_out <= std_logic_vector(signed(a) + signed(b));
-    end if;
-  end process;
-
-  process (Eu)
-  begin
-    if Eu = '0' then
-      --data_out <= (others => 'Z'); -- ligne lancelot
-      data_out <= (7 downto 0 =>'Z');
-    else
-      data_out <= "ZZZZZZZZ";
+      data_out <= (others => 'Z');
     end if;
   end process;
 end architecture;

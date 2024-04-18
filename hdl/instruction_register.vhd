@@ -28,17 +28,8 @@ begin
     end if;
   end process;
 
-  process (clk, Ei)
-  begin
-    if rising_edge(clk) then
-      if Ei = '1' then
-        address_out <= i_reg(3 downto 0);
-      else
-        address_out <= (others => 'Z');
-      end if;
-    end if;
-  end process;
-
   opcode_out <= i_reg(7 downto 4);
+
+  address_out <= i_reg(3 downto 0) when Ei = '0' else (others => 'Z');
 
 end architecture;

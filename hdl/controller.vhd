@@ -3,8 +3,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity controller_sequencer is
-  port
-  (
+  port (
     clk       : in std_logic;
     clr       : in std_logic;
     opcode_in : in std_logic_vector(3 downto 0);
@@ -25,126 +24,37 @@ entity controller_sequencer is
 end entity controller_sequencer;
 
 architecture behavioral of controller_sequencer is
-  constant SIG_CP : integer := 11;
-  constant SIG_EP : integer := 10;
-  constant SIG_LM : integer := 9;
-  constant SIG_CE : integer := 8;
-  constant SIG_LI : integer := 7;
-  constant SIG_EI : integer := 6;
-  constant SIG_LA : integer := 5;
-  constant SIG_EA : integer := 4;
-  constant SIG_SU : integer := 3;
-  constant SIG_EU : integer := 2;
-  constant SIG_LB : integer := 1;
-  constant SIG_LO : integer := 0;
-
-  constant OP_LDA : std_logic_vector(3 downto 0) := "0000";
-  constant OP_ADD : std_logic_vector(3 downto 0) := "0001";
-  constant OP_SUB : std_logic_vector(3 downto 0) := "0010";
-  constant OP_OUT : std_logic_vector(3 downto 0) := "1110";
-  constant OP_HLT : std_logic_vector(3 downto 0) := "1111";
-
-  signal stage : integer range 0 to 5 := 0;
-
-  signal control_signal : std_logic_vector(11 downto 0) := (others => '0');
-  signal hlt_signal     : std_logic                     := '1';
-
+  signal T                        : std_logic_vector(6 downto 1);
+  signal LDA, ADD, SUB, OUTP, HALT : std_logic;
 begin
-  process (clk, clr)
-  begin
-    if rising_edge(clk) then
-      -- go to idle mode
-      if clr = '1' then
-        stage <= 0;
-      else
-        if stage = 5 then
-          stage <= 0;
-        else
-          stage <= stage + 1;
-        end if;
-      end if;
-    end if;
-  end process;
+  ring_counter_inst : entity work.ring_counter
+    port map(
+      clk   => clk,
+      t     => T
+    );
 
-  process (stage, opcode_in)
-  begin
-    -- default high signals
-    control_signal(SIG_LO) <= '1';
-    control_signal(SIG_LB) <= '1';
-    control_signal(SIG_LA) <= '1';
-    control_signal(SIG_LI) <= '1';
-    control_signal(SIG_CE) <= '1';
-    control_signal(SIG_LM) <= '1';
-    control_signal(SIG_EI) <= '1';
+  instruction_decoder_inst : entity work.instruction_decoder
+    port map(
+      op_code => opcode_in,
+      LDA     => LDA,
+      ADD     => ADD,
+      SUB     => SUB,
+      OUTP    => OUTP,
+      HLT     => HALT
+    );
 
-    case stage is
-      when 0 =>
-        -- enable program counter (Ep), load into MAR (Lm)
-        control_signal(SIG_EP) <= '1';
-        control_signal(SIG_LM) <= '0';
-      when 1 =>
-        -- increment program counter (Cp)
-        control_signal(SIG_CP) <= '1';
-      when 2 =>
-        -- enable memory (CE), load into instruction register (Li)
-        control_signal(SIG_CE) <= '0';
-        control_signal(SIG_LI) <= '0';
-      when 3 =>
-        if opcode_in = OP_OUT then
-          -- enable accumulator (Ea), load into output register (Lo)
-          control_signal(SIG_EA) <= '1';
-          control_signal(SIG_LO) <= '0';
-        elsif opcode_in = OP_HLT then
-          -- halt (hlt)
-          hlt_signal <= '0';
-        else
-          -- load into MAR (Lm), enable instruction register (Ei)
-          control_signal(SIG_LM) <= '0';
-          control_signal(SIG_EI) <= '0';
-        end if;
-      when 4 =>
-        if opcode_in = OP_LDA then
-          -- enable memory (CE), load into accumulator (La)
-          control_signal(SIG_CE) <= '1';
-          control_signal(SIG_LA) <= '0';
-        elsif opcode_in = OP_ADD then
-          -- enable memory (CE), load into register b (Lb)
-          control_signal(SIG_CE) <= '0';
-          control_signal(SIG_LB) <= '0';
-        elsif opcode_in = OP_SUB then
-          -- enable memory (CE), load into register b (Lb)
-          control_signal(SIG_CE) <= '0';
-          control_signal(SIG_LB) <= '0';
-        end if;
-      when 5 =>
-        if opcode_in = OP_ADD then
-          -- enable adder-sub, enable memory (CE), load into register b (Lb)
-          control_signal(SIG_EU) <= '1';
-          control_signal(SIG_CE) <= '0';
-          control_signal(SIG_LB) <= '0';
-        elsif opcode_in = OP_SUB then
-          -- enable adder-sub, enable substraction (Su), enable memory (CE), load into register b (Lb)
-          control_signal(SIG_EU) <= '1';
-          control_signal(SIG_SU) <= '1';
-          control_signal(SIG_CE) <= '0';
-          control_signal(SIG_LB) <= '0';
-        end if;
-    end case;
-  end process;
-
-  Cp <= control_signal(11);
-  Ep <= control_signal(10);
-  Lm <= control_signal(9);
-  CE <= control_signal(8);
-  Li <= control_signal(7);
-  Ei <= control_signal(6);
-  La <= control_signal(5);
-  Ea <= control_signal(4);
-  Su <= control_signal(3);
-  Eu <= control_signal(2);
-  Lb <= control_signal(1);
-  Lo <= control_signal(0);
-
-  hlt <= hlt_signal;
+  Cp  <= T(2);
+  Ep  <= T(1);
+  Lm  <= not ((T(4) and LDA) or (T(4) and ADD) or (T(4) and SUB) or T(1));
+  CE  <= not ((T(5) and LDA) or (T(5) and ADD) or (T(5) and SUB) or T(3));
+  Li  <= not T(3);
+  Ei  <= not ((T(4) and LDA) or (T(4) and ADD) or (T(4) and SUB));
+  La  <= not ((T(5) and LDA) or (T(6) and ADD) or (T(6) and SUB));
+  Ea  <= T(4) and OUTP;
+  Su  <= T(6) and SUB;
+  Eu  <= (T(6) and ADD) or (T(6) and SUB);
+  Lb  <= not ((T(5) and ADD) or (T(5) and SUB));
+  Lo  <= T(4) nand OUTP;
+  hlt <= HALT;
 
 end architecture;
