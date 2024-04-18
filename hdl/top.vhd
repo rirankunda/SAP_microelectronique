@@ -54,7 +54,7 @@ architecture behavourial of top is
   signal adder_out : std_logic_vector(7 downto 0);
 begin
 
-  process (bus_signal, CE, Ep, Ei, Ea, Eu, Lm, Li, La, Lb, Lo, pc_out, ir_addr_out, acc_a_bus_out, adder_out)
+  process (bus_signal, CE, Ep, Ei, Ea, Eu, Lm, Li, La, Lb, Lo, pc_out, ir_addr_out, acc_a_bus_out, adder_out, mem_out)
   begin
     if Ep = '1' then
       bus_signal(3 downto 0) <= pc_out;
