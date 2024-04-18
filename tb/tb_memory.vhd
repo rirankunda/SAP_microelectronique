@@ -2,55 +2,41 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-library vunit_lib;
-context vunit_lib.vunit_context;
+entity memory_tb is
+end memory_tb;
 
-entity tb_memory is
-  generic (runner_cfg : string);
-end entity tb_memory;
+architecture behavior of memory_tb is 
+    signal CE         : std_logic := '0';
+    signal address_in : std_logic_vector(3 downto 0) := (others => '0');
+    signal data_out   : std_logic_vector(7 downto 0);
 
-architecture testbench of tb_memory is
-
-  -- Signals
-  signal CE_TB         : std_logic                    := '1'; -- Initialize CE to 1
-  signal address_in_TB : std_logic_vector(3 downto 0) := "0000"; -- Example address
-  signal data_out_TB   : std_logic_vector(7 downto 0);
-  signal sclk          : std_logic;
+    component memory is
+        port (
+            CE         : in std_logic;
+            address_in : in std_logic_vector(3 downto 0);
+            data_out   : out std_logic_vector(7 downto 0)
+        );
+    end component;
 
 begin
-  -- Instantiate the DUT
-  DUT_inst : entity work.memory
-    port map(
-      CE         => CE_TB,
-      address_in => address_in_TB,
-      data_out   => data_out_TB
+    uut: memory port map (
+        CE         => CE,
+        address_in => address_in,
+        data_out   => data_out
     );
 
-  clk_process : process
-  begin
-    sclk <= '0';
-    wait for 10 ns;
-    sclk <= '1';
-    wait for 10 ns;
-  end process;
+    stimulus: process
+    begin
+        CE <= '0';
+        address_in <= "0000";
+        wait for 10 ns;
 
-  CE_process : process
-  begin
-    CE_TB <= '1';
-    wait for 50 ns;
-    CE_TB <= '0';
-    wait for 50 ns;
-  end process;
+        CE <= '0';
+        address_in <= "0001";
+        wait for 10 ns;
 
-  tb_main : process
-  begin
-    wait for 50 ns;
-    test_runner_setup(runner, runner_cfg);
-    address_in_TB <= "0000"; -- Address 0
-    wait for 200 ns;
-    address_in_TB <= "0001"; -- Address 1
-    wait for 500 ns;
-    test_runner_cleanup(runner);
-  end process;
+        CE <='1';
 
-end architecture;
+        wait;
+    end process stimulus;
+end behavior;
