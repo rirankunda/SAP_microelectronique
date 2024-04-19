@@ -4,10 +4,10 @@ use ieee.numeric_std.all;
 
 entity top is
   port (
-    clk_in              : in std_logic;
-    clr                 : in std_logic;
-    bus_out             : out std_logic_vector(7 downto 0);
-    a, b, c, d, e, f, g : out std_logic
+    clk_in   : in std_logic;
+    clr      : in std_logic;
+    bus_out  : out std_logic_vector(7 downto 0);
+    segments : out std_logic_vector(6 downto 0)
   );
 end entity;
 
@@ -56,6 +56,14 @@ begin
 
   process (bus_signal, CE, Ep, Ei, Ea, Eu, Lm, Li, La, Lb, Lo, pc_out, ir_addr_out, acc_a_bus_out, adder_out, mem_out)
   begin
+    -- Default assignments
+    bus_signal <= (others => '0');
+    mar_in     <= (others => '0');
+    ir_in      <= (others => '0');
+    acc_a_in   <= (others => '0');
+    reg_b_in   <= (others => '0');
+    or_in      <= (others => '0');
+
     if Ep = '1' then
       bus_signal(3 downto 0) <= pc_out;
     elsif Ei = '0' then
@@ -181,14 +189,8 @@ begin
 
   seven_segment_inst : entity work.seven_segment
     port map(
-      bcd    => or_out(3 downto 0),
-      seg(0) => a,
-      seg(1) => b,
-      seg(2) => c,
-      seg(3) => d,
-      seg(4) => e,
-      seg(5) => f,
-      seg(6) => g
+      bcd => or_out(3 downto 0),
+      seg => segments(6 downto 0)
     );
 
   bus_out <= bus_signal;

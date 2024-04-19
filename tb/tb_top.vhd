@@ -13,8 +13,8 @@ architecture tb of tb_top is
   signal sclk  : std_logic;
   signal reset : std_logic;
 
-  signal sbus_out                   : std_logic_vector(7 downto 0);
-  signal sa, sb, sc, sd, se, sf, sg : std_logic;
+  signal sbus_out  : std_logic_vector(7 downto 0);
+  signal ssegments : std_logic_vector(6 downto 0);
 
 begin
   clk_process : process
@@ -35,16 +35,10 @@ begin
 
   top_inst : entity work.top
     port map(
-      clk_in  => sclk,
-      clr     => reset,
-      bus_out => sbus_out,
-      a       => sa,
-      b       => sb,
-      c       => sc,
-      d       => sd,
-      e       => se,
-      f       => sf,
-      g       => sg
+      clk_in   => sclk,
+      clr      => reset,
+      bus_out  => sbus_out,
+      segments => ssegments
     );
 
   tb_main : process
