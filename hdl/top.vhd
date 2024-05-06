@@ -190,7 +190,7 @@ begin
   seven_segment_inst : entity work.seven_segment
     port map(
       bcd => or_out(3 downto 0),
-      seg => segments(6 downto 0)
+      seg => segments
     );
 
   bus_out <= bus_signal;
